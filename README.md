@@ -4,7 +4,7 @@ This is a fast(ish) way to subdivide the icosahedron to obtain a sphere approxim
 
    - it does not generate a mesh, but a walkable grid which we can use for performing computations in spherical geometry, such as fictional planet generation. We can quickly find a data value for the nearest point on the grid to given geographical (i.e. spherical) coordinates.
    
-   - it does not therefore keep the triangles as they are generated, but instead saves the vertices and the edges connecting them, throwing the triangles away. We therefore generate the grid progressively not by iterating over the triangles generated in the previous pass, but by recursively subdividing the new triangle until the desired level of detail is reached.
+   - it does not therefore keep the triangles as they are generated, but instead saves the vertices and the edges connecting them, throwing the triangles away. We therefore generate the grid progressively not by iterating over the triangles generated in the previous pass, but by recursively subdividing the new triangle until the desired level of detail is reached. (We do still have up to 5% of the total number of triangles in memory at a time because each top-level triangle can't be deleted until all of its children, grandchildren and so on down to the lowest level of detail have been generated).
    
    - since Andreas wrote his blog post, newer and faster hashmap implementations have become available. I am using this by Martin Ankerl: https://github.com/martinus. With this implementation, there is no slowdown from having all the edges in the edgemap instead of truncating it after each layer, which enables the recurive approach.
    
