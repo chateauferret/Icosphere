@@ -1,0 +1,1 @@
+cmd='/usr/bin/clion/bin/cmake/linux/bin/cmake;-GCodeBlocks - Unix Makefiles;<SOURCE_DIR><SOURCE_SUBDIR>'

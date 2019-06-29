@@ -1,0 +1,19 @@
+Start testing: Sep 15 03:34 BST
+----------------------------------------------------------
+Unable to find executable: /home/martin/ClionProjects/icosphere/cmake-build-debug/tests
+1/1 Testing: tests
+1/1 Test: tests
+Command: ""
+Directory: /home/martin/ClionProjects/icosphere/cmake-build-debug
+"tests" start time: 
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"tests" end time: Sep 15 03:34 BST
+"tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 15 03:34 BST
