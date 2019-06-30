@@ -421,19 +421,7 @@
 		<Unit filename="/home/martin/ClionProjects/icosphere/cmake-build-debug/googletest-src/googletest/src/gtest_main.cc">
 			<Option target="gtest_main"/>
 		</Unit>
-		<Unit filename="/home/martin/ClionProjects/icosphere/cubicsphere/cubicsphere.cpp">
-			<Option target="icosphere"/>
-		</Unit>
-		<Unit filename="/home/martin/ClionProjects/icosphere/cubicsphere/cubicsphere.h">
-			<Option target="icosphere"/>
-		</Unit>
-		<Unit filename="/home/martin/ClionProjects/icosphere/hashmaps/bytell_hash_map.h">
-			<Option target="icosphere"/>
-		</Unit>
-		<Unit filename="/home/martin/ClionProjects/icosphere/hashmaps/flat_hash_map.h">
-			<Option target="icosphere"/>
-		</Unit>
-		<Unit filename="/home/martin/ClionProjects/icosphere/hashmaps/robinhood.h">
+		<Unit filename="/home/martin/ClionProjects/icosphere/containers/robinhood.h">
 			<Option target="icosphere"/>
 		</Unit>
 		<Unit filename="/home/martin/ClionProjects/icosphere/icosphere/icosphere.cpp">

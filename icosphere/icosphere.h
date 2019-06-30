@@ -4,12 +4,10 @@
 #include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/Rhumb.hpp>
-#include <vector>
-#include <forward_list>
-#include <list>
 #include <map>
+#include <mutex>
 #include "geometry.h"
-#include "../hashmaps/robinhood.h"
+#include "../containers/robinhood.h"
 
 
 
@@ -49,13 +47,13 @@ protected:
     unsigned _depth;
     uint32_t _count;
 
-    inline void subdivide (const unsigned int &level);
+    inline void subdivide ();
 
     // mesh data structures
 
     std::vector<Vertex*> _vertices;
     std::vector<Triangle*> _triangles;
-
+    robin_hood::unordered_map<Vertex*, Vertex*> neighbours;
 
     mutable Vertex* _lastVisited;
     inline Triangle* makeTriangle (Vertex* a, Vertex* b, Vertex* c, Triangle* parent);
@@ -75,9 +73,10 @@ protected:
 
     Vertex* ids0 [3];  // triangles of outer vertices
     Vertex* ids1 [3];  // triangles of edge vertices
-    uint32_t _triangle, _triangleCount;
+
     Cartesian c;
     unsigned level;
+    uint32_t expectedVertices;
 
 
 };

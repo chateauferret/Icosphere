@@ -40,13 +40,9 @@ set(SOURCE_FILES
         geometry.h
         icosphere/icosphere.h
         icosphere/icosphere.cpp
-        cubicsphere/cubicsphere.h
-        cubicsphere/cubicsphere.cpp
         tests/icospheretest.cpp
         tests/main.cpp
-        hashmaps/flat_hash_map.h
-        hashmaps/bytell_hash_map.h
-        hashmaps/robinhood.h
+        containers/robinhood.h
         tests/minimalistprinter.h
         tests/MinimalistPrinter.cpp
 )

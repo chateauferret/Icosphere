@@ -3,8 +3,6 @@
 
 #include <cstdint>
 #include <vector>
-#include <forward_list>
-#include <list>
 
 struct Cartesian {
 public:
@@ -19,7 +17,8 @@ public:
 struct Vertex {
 public:
     Cartesian cartesian;
-    std::forward_list<Vertex*> neighbours;              // neighbouring vertices
+    std::vector<Vertex*> neighbours;              // neighbouring vertices
+
     uint32_t id;
     unsigned level;
 };

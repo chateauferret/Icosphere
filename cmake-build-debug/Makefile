@@ -234,33 +234,6 @@ gtest/fast:
 	$(MAKE) -f googletest-build/googletest/CMakeFiles/gtest.dir/build.make googletest-build/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
-cubicsphere/cubicsphere.o: cubicsphere/cubicsphere.cpp.o
-
-.PHONY : cubicsphere/cubicsphere.o
-
-# target to build an object file
-cubicsphere/cubicsphere.cpp.o:
-	$(MAKE) -f CMakeFiles/icosphere.dir/build.make CMakeFiles/icosphere.dir/cubicsphere/cubicsphere.cpp.o
-.PHONY : cubicsphere/cubicsphere.cpp.o
-
-cubicsphere/cubicsphere.i: cubicsphere/cubicsphere.cpp.i
-
-.PHONY : cubicsphere/cubicsphere.i
-
-# target to preprocess a source file
-cubicsphere/cubicsphere.cpp.i:
-	$(MAKE) -f CMakeFiles/icosphere.dir/build.make CMakeFiles/icosphere.dir/cubicsphere/cubicsphere.cpp.i
-.PHONY : cubicsphere/cubicsphere.cpp.i
-
-cubicsphere/cubicsphere.s: cubicsphere/cubicsphere.cpp.s
-
-.PHONY : cubicsphere/cubicsphere.s
-
-# target to generate assembly for a file
-cubicsphere/cubicsphere.cpp.s:
-	$(MAKE) -f CMakeFiles/icosphere.dir/build.make CMakeFiles/icosphere.dir/cubicsphere/cubicsphere.cpp.s
-.PHONY : cubicsphere/cubicsphere.cpp.s
-
 icosphere/icosphere.o: icosphere/icosphere.cpp.o
 
 .PHONY : icosphere/icosphere.o
@@ -390,9 +363,6 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
-	@echo "... cubicsphere/cubicsphere.o"
-	@echo "... cubicsphere/cubicsphere.i"
-	@echo "... cubicsphere/cubicsphere.s"
 	@echo "... icosphere/icosphere.o"
 	@echo "... icosphere/icosphere.i"
 	@echo "... icosphere/icosphere.s"

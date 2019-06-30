@@ -7,8 +7,7 @@
 // Public License v. 2.0. If a copy of the MPL was not distributed
 // with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <unordered_map>
-#include <bits/unordered_map.h>
+#include <thread>
 #include "icosphere.h"
 
 
@@ -33,10 +32,11 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
     //--------------------------------------------------------------------------------
 
 
-    uint32_t expectedVertices = (uint32_t) 10 * pow (4, depth - 1) + 2;
+    expectedVertices = (uint32_t) 10 * pow (4, depth - 1) + 2;
     _vertices.reserve (expectedVertices);
     edgeMap.reserve (expectedVertices);
     _gc = new GeographicLib::Geocentric (1, 0);
+
 
     // init with an icosahedron
      for (int i = 0; i < 12; i++) {
@@ -65,12 +65,11 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
     }
 
 
-        subdivide (depth);
+    subdivide ();
 
 
     _initial = false;
-    _triangle = 0;
-    _triangleCount = 20;
+
 }
 
 Icosphere::~Icosphere() {
@@ -79,16 +78,19 @@ Icosphere::~Icosphere() {
     std::for_each (_vertices.begin(), _vertices.end(), [] (Vertex* p) { delete p; });
 }
 
-void Icosphere::subdivide (const unsigned int& level) {
+void Icosphere::subdivide() {
 
     for (Triangle* t : _triangles) {
         divideTriangle (t);
     }
+
 }
 
+
 void Icosphere::divideTriangle (Triangle* t) {
+
     unsigned level = t -> level + 1;
-    for (k = 0; k < 3; ++k) {
+    for (  k  = 0; k < 3; ++k) {
 
         ids0[k] = t -> vertices [k];
         e1 = t -> vertices [(k + 1) % 3];
@@ -101,14 +103,14 @@ void Icosphere::divideTriangle (Triangle* t) {
             c.z = ids0[k]-> cartesian.z +  e1 -> cartesian.z;
             ids1[k] = addVertex (c, level);
 
-            double mag;
-            mag = sqrt (ids1[k] -> cartesian.x * ids1[k] -> cartesian.x + ids1[k] -> cartesian.y * ids1[k] -> cartesian.y + ids1[k] -> cartesian.z * ids1[k] -> cartesian.z);
+            double mag = sqrt (ids1[k] -> cartesian.x * ids1[k] -> cartesian.x + ids1[k] -> cartesian.y * ids1[k] -> cartesian.y + ids1[k] -> cartesian.z * ids1[k] -> cartesian.z);
+
             ids1[k] -> cartesian.x /= mag;
             ids1[k] -> cartesian.y /= mag;
             ids1[k] -> cartesian.z /= mag;
 
-
             edgeMap [edgeKey] = ids1[k];
+
         } else {
             ids1[k] = it -> second;
         }
@@ -164,10 +166,13 @@ Triangle* Icosphere::makeTriangle (Vertex* a, Vertex* b, Vertex* c, Triangle* pa
 }
 
 void Icosphere::makeNeighbours (Vertex* p, Vertex* q) {
+    if (p -> neighbours.empty ()) { p -> neighbours.reserve (_depth * 6); }
+    if (q -> neighbours.empty ()) { q -> neighbours.reserve (_depth * 6); }
     if (_initial || std::find (p -> neighbours.begin (), p->neighbours.end(), q) == p -> neighbours.end()) {
-        p -> neighbours.emplace_front (q);
-        q -> neighbours.emplace_front (p);
+        p -> neighbours.push_back (q);
+        q -> neighbours.push_back (p);
     }
+
 }
 
 Vertex* Icosphere::operator [] (const uint32_t& id) {
@@ -207,7 +212,7 @@ Vertex* Icosphere::walkTowards (const Cartesian& target, const unsigned int& dep
   if (depth == 0 || depth > _depth - 1) { return walkTowards (target, _depth - 1); }
   double dist = distSquared (_lastVisited -> cartesian, target);
 
-  std::forward_list<Vertex*>::const_iterator i  = _lastVisited -> neighbours.begin();
+  std::vector<Vertex*>::const_iterator i  = _lastVisited -> neighbours.begin();
   Vertex* next;
 
   bool found = false;
