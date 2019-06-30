@@ -47,7 +47,7 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
         addVertex (c, 0);
     }
     _lastVisited = _vertices [0];
-
+    std::vector<Triangle*> _triangles;
     for (int i = 0; i < 20; i++) {
 
         Triangle* t = new Triangle();
@@ -65,7 +65,10 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
     }
 
 
-    subdivide ();
+    for (Triangle* t : _triangles) {
+        divideTriangle (t);
+    }
+
 
 
     _initial = false;
@@ -74,16 +77,7 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
 
 Icosphere::~Icosphere() {
     delete _gc;
-    std::for_each (_triangles.begin(), _triangles.end(), [] (Triangle* t) { delete t; });
     std::for_each (_vertices.begin(), _vertices.end(), [] (Vertex* p) { delete p; });
-}
-
-void Icosphere::subdivide() {
-
-    for (Triangle* t : _triangles) {
-        divideTriangle (t);
-    }
-
 }
 
 
@@ -139,9 +133,15 @@ void Icosphere::divideTriangle (Triangle* t) {
 
     if (level < _depth)  {
         for (int i = 0; i < 4; i++) {
-            divideTriangle (s [i]);
+            divideTriangle (s[i]);
+        }
+    } else {
+        for (int i = 0; i < 4; i++) {
+            delete s[i];
         }
     }
+
+    delete t;
 }
 
 
@@ -250,10 +250,6 @@ Vertex* Icosphere::walkTowards (const Cartesian& target, const unsigned int& dep
 
     void Icosphere::toCartesian (const Geolocation& g, Cartesian& c) {
         _gc -> Forward (g.lat, g.lon, 0, c.x, c.y, c.z);
-    }
-
-    std::pair<std::vector<Triangle*>::iterator, std::vector<Triangle*>::iterator> Icosphere::triangles (const unsigned& level) {
-        return std::make_pair (_triangles.begin(), _triangles.end());
     }
 
     std::pair<std::vector<Vertex*>::iterator, std::vector<Vertex*>::iterator> Icosphere::vertices() {

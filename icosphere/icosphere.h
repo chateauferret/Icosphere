@@ -40,19 +40,16 @@ public:
 
     inline void divideTriangle (Triangle* t);
 
-    std::pair<std::vector<Triangle*>::iterator, std::vector<Triangle*>::iterator> triangles (const unsigned& level);
     std::pair<std::vector<Vertex*>::iterator, std::vector<Vertex*>::iterator> vertices();
 
 protected:
     unsigned _depth;
     uint32_t _count;
 
-    inline void subdivide ();
-
     // mesh data structures
 
     std::vector<Vertex*> _vertices;
-    std::vector<Triangle*> _triangles;
+
     robin_hood::unordered_map<Vertex*, Vertex*> neighbours;
 
     mutable Vertex* _lastVisited;
