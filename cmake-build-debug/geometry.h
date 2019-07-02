@@ -18,7 +18,6 @@ struct Vertex {
 public:
     Cartesian cartesian;
     std::vector<Vertex*> neighbours;              // neighbouring vertices
-
     uint32_t id;
     unsigned level;
 };

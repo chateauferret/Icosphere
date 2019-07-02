@@ -50,8 +50,6 @@ protected:
 
     std::vector<Vertex*> _vertices;
 
-    robin_hood::unordered_map<Vertex*, Vertex*> neighbours;
-
     mutable Vertex* _lastVisited;
     inline Triangle* makeTriangle (Vertex* a, Vertex* b, Vertex* c, Triangle* parent);
     inline void makeNeighbours (Vertex* p, Vertex* q);

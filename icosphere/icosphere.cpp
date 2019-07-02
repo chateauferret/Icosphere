@@ -34,7 +34,7 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
 
     expectedVertices = (uint32_t) 10 * pow (4, depth - 1) + 2;
     _vertices.reserve (expectedVertices);
-    edgeMap.reserve (expectedVertices);
+    edgeMap.reserve (expectedVertices * 4);
     _gc = new GeographicLib::Geocentric (1, 0);
 
 

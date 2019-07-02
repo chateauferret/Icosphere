@@ -49,7 +49,7 @@ class IcosphereTest : public ::testing::TestWithParam<IcosphereTestRow> {
 
 TEST (IcosphereTest, buildSpeed) {
 
-    for (int j = 4; j < 12; j++) {
+    for (int j = 4; j < 10; j++) {
         std::cout << "Built icosphere level " << j << ": ";
         double start = clock () / static_cast<double> (CLOCKS_PER_SEC);
         Icosphere* i = new Icosphere (j);
