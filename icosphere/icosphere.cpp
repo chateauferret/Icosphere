@@ -31,10 +31,10 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
        {6,1,10}, {9,0,11}, {9,11,2}, {9,2,5}, {7,2,11} };
     //--------------------------------------------------------------------------------
 
+    expectedVertices = (uint32_t) 10 * pow (4, depth) + 2;
 
-    expectedVertices = (uint32_t) 10 * pow (4, depth - 1) + 2;
     _vertices.reserve (expectedVertices);
-    edgeMap.reserve (expectedVertices * 4);
+    edgeMap.reserve (expectedVertices * 3);
     _gc = new GeographicLib::Geocentric (1, 0);
 
 
@@ -70,7 +70,6 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
     }
 
 
-
     _initial = false;
 
 }
@@ -95,14 +94,14 @@ void Icosphere::divideTriangle (Triangle* t) {
             c.x = ids0[k]-> cartesian.x +  e1 -> cartesian.x;
             c.y = ids0[k]-> cartesian.y +  e1 -> cartesian.y;
             c.z = ids0[k]-> cartesian.z +  e1 -> cartesian.z;
+
+
+            double mag = sqrt (c.x * c.x + c.y * c.y + c.z * c.z);
+
+            c.x /= mag;
+            c.y /= mag;
+            c.z /= mag;
             ids1[k] = addVertex (c, level);
-
-            double mag = sqrt (ids1[k] -> cartesian.x * ids1[k] -> cartesian.x + ids1[k] -> cartesian.y * ids1[k] -> cartesian.y + ids1[k] -> cartesian.z * ids1[k] -> cartesian.z);
-
-            ids1[k] -> cartesian.x /= mag;
-            ids1[k] -> cartesian.y /= mag;
-            ids1[k] -> cartesian.z /= mag;
-
             edgeMap [edgeKey] = ids1[k];
 
         } else {
@@ -147,7 +146,7 @@ void Icosphere::divideTriangle (Triangle* t) {
 
     Vertex* Icosphere::addVertex (const Cartesian& c, int level) {
     Vertex* v = new Vertex();
-    v -> id = ++ _count;
+    v -> id =  _count++;
     v -> cartesian = c;
     v -> level = level;
     _vertices.push_back (v);
@@ -155,14 +154,12 @@ void Icosphere::divideTriangle (Triangle* t) {
 }
 
 Triangle* Icosphere::makeTriangle (Vertex* a, Vertex* b, Vertex* c, Triangle* parent) {
-
     Triangle* t = new Triangle();
     t -> vertices [0] = a;
     t -> vertices [1] = b;
     t -> vertices [2] = c;
     t -> level = parent ? parent -> level + 1 : 0;
     return t;
-
 }
 
 void Icosphere::makeNeighbours (Vertex* p, Vertex* q) {
@@ -172,7 +169,6 @@ void Icosphere::makeNeighbours (Vertex* p, Vertex* q) {
         p -> neighbours.push_back (q);
         q -> neighbours.push_back (p);
     }
-
 }
 
 Vertex* Icosphere::operator [] (const uint32_t& id) {
@@ -252,12 +248,8 @@ Vertex* Icosphere::walkTowards (const Cartesian& target, const unsigned int& dep
         _gc -> Forward (g.lat, g.lon, 0, c.x, c.y, c.z);
     }
 
-    std::pair<std::vector<Vertex*>::iterator, std::vector<Vertex*>::iterator> Icosphere::vertices() {
-        return std::make_pair (_vertices.begin(), _vertices.end());
-    }
-
     unsigned long Icosphere::vertexCount () {
-        return _vertices.size();
+        return _count;
     }
 
 } // namespace

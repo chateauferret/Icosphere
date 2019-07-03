@@ -40,8 +40,6 @@ public:
 
     inline void divideTriangle (Triangle* t);
 
-    std::pair<std::vector<Vertex*>::iterator, std::vector<Vertex*>::iterator> vertices();
-
 protected:
     unsigned _depth;
     uint32_t _count;
@@ -49,7 +47,6 @@ protected:
     // mesh data structures
 
     std::vector<Vertex*> _vertices;
-
     mutable Vertex* _lastVisited;
     inline Triangle* makeTriangle (Vertex* a, Vertex* b, Vertex* c, Triangle* parent);
     inline void makeNeighbours (Vertex* p, Vertex* q);
