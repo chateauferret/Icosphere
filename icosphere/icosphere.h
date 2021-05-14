@@ -11,34 +11,25 @@
 
 
 
-
-namespace Halifirien {
-
-
-
+template<class T>
 class Icosphere {
 public:
 
     static constexpr double X = 0.525731112119133606;
     static constexpr double Z = 0.850650808352039932;
 
-    Icosphere (const unsigned int& depth);
-    Icosphere();
+    explicit Icosphere<T> (const unsigned int& depth);
     ~Icosphere();
+    unsigned long vertexCount();
+    unsigned int depth();
+    Vertex<T>* nearest (const Geolocation& target, const unsigned int& depth = 0);
 
-    unsigned long vertexCount ();
-    Vertex* operator [] (const uint32_t& id);
-    void visit (Vertex* vertex);
-    Vertex* walkTowards (const Geolocation& target, const unsigned int& depth);
-    Vertex* walkTowards (const Cartesian& target, const unsigned int& depth) const;
-    Vertex* nearest (const Geolocation& target, const unsigned int& depth = 0);
 
     void toGeolocation (const Cartesian& c, Geolocation& g);
     void toCartesian (const Geolocation& g, Cartesian& c);
-    static double distSquared (const Cartesian& a, const Cartesian& b);
 
 
-    inline void divideTriangle (Triangle* t);
+    inline void divideTriangle (Triangle<T>* t);
 
 protected:
     unsigned _depth;
@@ -46,31 +37,33 @@ protected:
 
     // mesh data structures
 
-    std::vector<Vertex*> _vertices;
-    mutable Vertex* _lastVisited;
-    inline Triangle* makeTriangle (Vertex* a, Vertex* b, Vertex* c, Triangle* parent);
-    inline void makeNeighbours (Vertex* p, Vertex* q);
+    std::vector<Vertex<T>*> _vertices;
+    mutable Vertex<T>* _lastVisited;
+    inline Triangle<T>* makeTriangle (Vertex<T>* a, Vertex<T>* b, Vertex<T>* c, Triangle<T>* parent);
+    inline void makeNeighbours (Vertex<T>* p, Vertex<T>* q);
 
-    inline Vertex* addVertex (const Cartesian& c, int level);
+    inline Vertex<T>* addVertex (const Cartesian& c, int level);
 
     GeographicLib::Geocentric* _gc;
 
     // these are working variables for triangle subdivision
     uint32_t k;
-    Vertex* e1;
+    Vertex<T>* e1;
     uint64_t edgeKey;
     bool _initial;
-    robin_hood::unordered_map<uint64_t, Vertex*> edgeMap;
-    robin_hood::unordered_map<uint64_t, Vertex*>::iterator it;
+    robin_hood::unordered_map<uint64_t, Vertex<T>*> edgeMap;
+    typename robin_hood::unordered_map<uint64_t, Vertex<T>*>::iterator it;
 
-    Vertex* ids0 [3];  // triangles of outer vertices
-    Vertex* ids1 [3];  // triangles of edge vertices
+    Vertex<T>* ids0 [3];  // triangles of outer vertices
+    Vertex<T>* ids1 [3];  // triangles of edge vertices
 
     Cartesian c;
     unsigned level;
     uint32_t expectedVertices;
+    Vertex<T>* operator [] (const uint32_t& id);
 
+    Vertex<T>* walkTowards (const Geolocation& target, const unsigned int& depth);
+    Vertex<T>* walkTowards (const Cartesian& target, const unsigned int& depth) const;
 
 };
-} // namespace
 #endif // ICOSPHERE_H

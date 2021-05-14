@@ -5,6 +5,8 @@
 cmake_minimum_required (VERSION 2.8.4)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules/")
 project (icosphere)
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
@@ -37,7 +39,7 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 #set(CMAKE_AUTOMOC ON)
 set(SOURCE_FILES
-        geometry.h
+        icosphere/geometry.h
         icosphere/icosphere.h
         icosphere/icosphere.cpp
         tests/icospheretest.cpp

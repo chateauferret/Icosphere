@@ -10,9 +10,8 @@
 #include <thread>
 #include "icosphere.h"
 
-
-namespace Halifirien {
-Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _initial (true) {
+template <class T>
+Icosphere<T>::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _initial (true) {
 
     //--------------------------------------------------------------------------------
     // icosahedron data
@@ -47,10 +46,10 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
         addVertex (c, 0);
     }
     _lastVisited = _vertices [0];
-    std::vector<Triangle*> _triangles;
+    std::vector<Triangle<T>*> _triangles;
     for (int i = 0; i < 20; i++) {
 
-        Triangle* t = new Triangle();
+        Triangle<T>* t = new Triangle<T>();
         for (int k = 0; k < 3; k++) {
             t -> vertices [k] = _vertices [tindices [i] [k]];
         }
@@ -65,7 +64,7 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
     }
 
 
-    for (Triangle* t : _triangles) {
+    for (Triangle<T>* t : _triangles) {
         divideTriangle (t);
     }
 
@@ -74,13 +73,14 @@ Icosphere::Icosphere (const unsigned int& depth) : _depth (depth), _count (0), _
 
 }
 
-Icosphere::~Icosphere() {
+template <class T>
+Icosphere<T>::~Icosphere() {
     delete _gc;
-    std::for_each (_vertices.begin(), _vertices.end(), [] (Vertex* p) { delete p; });
+    std::for_each (_vertices.begin(), _vertices.end(), [] (Vertex<T>* p) { delete p; });
 }
 
-
-void Icosphere::divideTriangle (Triangle* t) {
+template <class T>
+void Icosphere<T>::divideTriangle (Triangle<T>* t) {
 
     unsigned level = t -> level + 1;
     for (  k  = 0; k < 3; ++k) {
@@ -111,7 +111,7 @@ void Icosphere::divideTriangle (Triangle* t) {
 
     // The three members of ids0 are the triangles of the three vertices of the parent (outer) triangle
     // The three members of ids1 are the triangles of the three midpoints of the parent triangle's edges
-    Triangle* s [4];
+    Triangle<T>* s [4];
     s [0] = makeTriangle (ids0[0], ids1[0], ids1[2], t);
     s [1] = makeTriangle (ids0[1], ids1[1], ids1[0], t);
     s [2] = makeTriangle (ids0[2], ids1[2], ids1[1], t);
@@ -143,9 +143,9 @@ void Icosphere::divideTriangle (Triangle* t) {
     delete t;
 }
 
-
-    Vertex* Icosphere::addVertex (const Cartesian& c, int level) {
-    Vertex* v = new Vertex();
+template <class T>
+Vertex<T>* Icosphere<T>::addVertex (const Cartesian& c, int level) {
+    Vertex<T>* v = new Vertex<T>();
     v -> id =  _count++;
     v -> cartesian = c;
     v -> level = level;
@@ -153,8 +153,9 @@ void Icosphere::divideTriangle (Triangle* t) {
     return v;
 }
 
-Triangle* Icosphere::makeTriangle (Vertex* a, Vertex* b, Vertex* c, Triangle* parent) {
-    Triangle* t = new Triangle();
+template <class T>
+Triangle<T>* Icosphere<T>::makeTriangle (Vertex<T>* a, Vertex<T>* b, Vertex<T>* c, Triangle<T>* parent) {
+    Triangle<T>* t = new Triangle<T>();
     t -> vertices [0] = a;
     t -> vertices [1] = b;
     t -> vertices [2] = c;
@@ -162,7 +163,8 @@ Triangle* Icosphere::makeTriangle (Vertex* a, Vertex* b, Vertex* c, Triangle* pa
     return t;
 }
 
-void Icosphere::makeNeighbours (Vertex* p, Vertex* q) {
+template <class T>
+void Icosphere<T>::makeNeighbours (Vertex<T>* p, Vertex<T>* q) {
     if (p -> neighbours.empty ()) { p -> neighbours.reserve (_depth * 6); }
     if (q -> neighbours.empty ()) { q -> neighbours.reserve (_depth * 6); }
     if (_initial || std::find (p -> neighbours.begin (), p->neighbours.end(), q) == p -> neighbours.end()) {
@@ -171,19 +173,21 @@ void Icosphere::makeNeighbours (Vertex* p, Vertex* q) {
     }
 }
 
-Vertex* Icosphere::operator [] (const uint32_t& id) {
+template <class T>
+Vertex<T>* Icosphere<T>::operator [] (const uint32_t& id) {
     return _vertices [id];
 }
 
-Vertex* Icosphere::nearest (const Geolocation& target, const unsigned int& depth)  {
+template <class T>
+Vertex<T>* Icosphere<T>::nearest (const Geolocation& target, const unsigned int& depth)  {
     double d, dist;
-    Vertex* pV;
+    Vertex<T>* pV;
     _lastVisited = _vertices [0];
     for (int i = 1; i < 12; i++) {
         pV = _vertices [i];
         Cartesian c;
         toCartesian (target, c);
-        d = distSquared (c, pV -> cartesian);
+        d = Geometry::distSquared (c, pV -> cartesian);
         if (i == 1 || d < dist) {
            _lastVisited = pV;
            dist = d;
@@ -194,27 +198,25 @@ Vertex* Icosphere::nearest (const Geolocation& target, const unsigned int& depth
     return walkTowards (target, depth);
 }
 
-void Icosphere::visit (Vertex* pV) {
-    _lastVisited = pV;
-}
-
-Vertex* Icosphere::walkTowards (const Geolocation& target, const unsigned int& depth) {
+template <class T>
+Vertex<T>* Icosphere<T>::walkTowards (const Geolocation& target, const unsigned int& depth) {
     Cartesian c;
     toCartesian (target, c);
     return walkTowards (c, depth);
 }
 
-Vertex* Icosphere::walkTowards (const Cartesian& target, const unsigned int& depth) const {
+template <class T>
+Vertex<T>* Icosphere<T>::walkTowards (const Cartesian& target, const unsigned int& depth) const {
   if (depth == 0 || depth > _depth - 1) { return walkTowards (target, _depth - 1); }
-  double dist = distSquared (_lastVisited -> cartesian, target);
+  double dist = Geometry::distSquared (_lastVisited -> cartesian, target);
 
-  std::vector<Vertex*>::const_iterator i  = _lastVisited -> neighbours.begin();
-  Vertex* next;
+  typename std::vector<Vertex<T>*>::const_iterator i  = _lastVisited -> neighbours.begin();
+  Vertex<T>* next;
 
   bool found = false;
   while (i != _lastVisited -> neighbours.end()) {
       if ((*i) -> level <= depth) {
-          double d = distSquared ((*i) -> cartesian, target);
+          double d = Geometry::distSquared ((*i) -> cartesian, target);
           if (d < dist && (*i) -> level >= (_lastVisited -> level)) {
               next = *i;
               dist = d;
@@ -232,26 +234,26 @@ Vertex* Icosphere::walkTowards (const Cartesian& target, const unsigned int& dep
     }
 }
 
-    double Icosphere::distSquared (const Cartesian& a, const Cartesian& b) {
-        double dx = fabs (a.x - b.x);
-        double dy = fabs (a.y - b.y);
-        double dz = fabs (a.z - b.z);
-        double dist = dx * dx + dy * dy + dz * dz;
-        return dist;
-    }
 
-    void Icosphere::toGeolocation (const Cartesian& c, Geolocation& g) {
-        _gc -> Reverse (c.x, c.y, c.z, g.lat, g.lon, g.height);
-    }
+template <class T>
+void Icosphere<T>::toGeolocation (const Cartesian& c, Geolocation& g) {
+    _gc -> Reverse (c.x, c.y, c.z, g.lat, g.lon, g.height);
+}
 
-    void Icosphere::toCartesian (const Geolocation& g, Cartesian& c) {
-        _gc -> Forward (g.lat, g.lon, 0, c.x, c.y, c.z);
-    }
+template <class T>
+void Icosphere<T>::toCartesian (const Geolocation& g, Cartesian& c) {
+    _gc -> Forward (g.lat, g.lon, 0, c.x, c.y, c.z);
+}
 
-    unsigned long Icosphere::vertexCount () {
-        return _count;
-    }
+template <class T>
+unsigned long Icosphere<T>::vertexCount () {
+    return _count;
+}
 
-} // namespace
+template <class T>
+unsigned int Icosphere<T>::depth () {
+    return _depth;
+}
 
 
+template class Icosphere<IcosphereTestRow>;

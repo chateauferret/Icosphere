@@ -3,18 +3,9 @@
 #include <iostream>
 #include <random>
 #include <icosphere/icosphere.h>
+#include <icosphere/geometry.h>
 
 
-using namespace Halifirien;
-
-class IcosphereTestRow {
-public:
-    IcosphereTestRow () { }
-
-protected:
-
-
-};
 
 
 class IcosphereTest : public ::testing::TestWithParam<IcosphereTestRow> {
@@ -23,7 +14,7 @@ class IcosphereTest : public ::testing::TestWithParam<IcosphereTestRow> {
     double maxdist, totaldist;
     long timeEnd, timeStart;
 
-    Icosphere icosphere = Icosphere (5);
+    Icosphere<IcosphereTestRow> icosphere;
     time_t seed;
     std::default_random_engine e;
     std::uniform_real_distribution<double> random;
@@ -52,18 +43,18 @@ TEST (IcosphereTest, buildSpeed) {
     for (int j = 4; j < 10; j++) {
         std::cout << "Built icosphere level " << j << ": ";
         double start = clock () / static_cast<double> (CLOCKS_PER_SEC);
-        Icosphere* i = new Icosphere (j);
+        Icosphere<IcosphereTestRow>* icosphere = new Icosphere<IcosphereTestRow> (j);
         double end = clock () / static_cast<double> (CLOCKS_PER_SEC);
-        std::cout <<  i -> vertexCount () << " vertices in " << end - start << " seconds: " << sizeof (*i) << " bytes\n";
-        delete i;
+        std::cout <<  icosphere -> vertexCount() << " verticecs in " << end - start << " seconds: " << sizeof (*icosphere) << " bytes\n";
+        delete icosphere;
     }
 }
 
 
 TEST (IcosphereTest, searchTimes) {
     std::cout << "Search test\n";
-    for (int i = 6; i < 9; i++) {
-        Icosphere* icosphere = new Icosphere (i);
+    for (int i = 6; i < 10; i++) {
+        Icosphere<IcosphereTestRow>* icosphere = new Icosphere<IcosphereTestRow> (i);
         time_t seed = time (NULL);
         std::default_random_engine e = std::default_random_engine (seed);
         std::uniform_real_distribution<double> random = std::uniform_real_distribution<double> (0.0, 1.0);
@@ -75,11 +66,11 @@ TEST (IcosphereTest, searchTimes) {
             Geolocation sought;
             sought.lat = (random (e) - 0.5) * 180;
             sought.lon = (random (e) - 0.5) * 360;
-            Vertex* found = icosphere -> nearest (sought);
+            Vertex<IcosphereTestRow>* found = icosphere -> nearest (sought);
             Cartesian c;
             icosphere -> toCartesian (sought, c);
 
-            double dist = sqrt (icosphere -> distSquared (c, found -> cartesian));
+            double dist = sqrt (Geometry::distSquared (c, found -> cartesian));
             maxdist = dist > maxdist ? dist : maxdist;
             totaldist += dist;
         }

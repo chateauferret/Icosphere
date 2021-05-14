@@ -1,6 +1,7 @@
 
 #include <limits.h>
 #include "minimalistprinter.h"
+#include "icosphere/icosphere.h"
 
 
 int main (int argc, char **argv) {

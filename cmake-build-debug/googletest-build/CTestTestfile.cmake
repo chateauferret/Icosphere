@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /home/martin/ClionProjects/icosphere/cmake-build-debug/googletest-src
-# Build directory: /home/martin/ClionProjects/icosphere/cmake-build-debug/googletest-build
+# Source directory: /home/ferret/CLionProjects/icosphere/cmake-build-debug/googletest-src
+# Build directory: /home/ferret/CLionProjects/icosphere/cmake-build-debug/googletest-build
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.

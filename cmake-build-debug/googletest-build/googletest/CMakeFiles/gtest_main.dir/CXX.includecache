@@ -6,22 +6,26 @@
 
 #IncludeRegexTransform: 
 
-/home/martin/ClionProjects/icosphere/cmake-build-debug/googletest-src/googletest/src/gtest_main.cc
+/home/ferret/CLionProjects/icosphere/cmake-build-debug/googletest-src/googletest/src/gtest_main.cc
 cstdio
 -
 gtest/gtest.h
-/home/martin/ClionProjects/icosphere/cmake-build-debug/googletest-src/googletest/src/gtest/gtest.h
+/home/ferret/CLionProjects/icosphere/cmake-build-debug/googletest-src/googletest/src/gtest/gtest.h
 
 googletest-src/googletest/include/gtest/gtest-death-test.h
 gtest/internal/gtest-death-test-internal.h
 googletest-src/googletest/include/gtest/gtest/internal/gtest-death-test-internal.h
 
 googletest-src/googletest/include/gtest/gtest-matchers.h
+atomic
+-
 memory
 -
 ostream
 -
 string
+-
+type_traits
 -
 gtest/gtest-printers.h
 googletest-src/googletest/include/gtest/gtest/gtest-printers.h
@@ -35,10 +39,14 @@ limits
 -
 memory
 -
+sstream
+-
 gtest/internal/gtest-port.h
 googletest-src/googletest/include/gtest/gtest/internal/gtest-port.h
 
 googletest-src/googletest/include/gtest/gtest-param-test.h
+iterator
+-
 utility
 -
 gtest/internal/gtest-internal.h
@@ -50,6 +58,8 @@ googletest-src/googletest/include/gtest/gtest/internal/gtest-port.h
 
 googletest-src/googletest/include/gtest/gtest-printers.h
 functional
+-
+memory
 -
 ostream
 -
@@ -69,12 +79,6 @@ gtest/internal/gtest-internal.h
 googletest-src/googletest/include/gtest/gtest/internal/gtest-internal.h
 gtest/internal/gtest-port.h
 googletest-src/googletest/include/gtest/gtest/internal/gtest-port.h
-absl/strings/string_view.h
-googletest-src/googletest/include/gtest/absl/strings/string_view.h
-absl/types/optional.h
-googletest-src/googletest/include/gtest/absl/types/optional.h
-absl/types/variant.h
-googletest-src/googletest/include/gtest/absl/types/variant.h
 gtest/internal/custom/gtest-printers.h
 googletest-src/googletest/include/gtest/gtest/internal/custom/gtest-printers.h
 
@@ -89,6 +93,8 @@ gtest/internal/gtest-string.h
 googletest-src/googletest/include/gtest/gtest/internal/gtest-string.h
 
 googletest-src/googletest/include/gtest/gtest-typed-test.h
+gtest/internal/gtest-internal.h
+googletest-src/googletest/include/gtest/gtest/internal/gtest-internal.h
 gtest/internal/gtest-port.h
 googletest-src/googletest/include/gtest/gtest/internal/gtest-port.h
 gtest/internal/gtest-type-util.h
@@ -173,6 +179,8 @@ float.h
 -
 string.h
 -
+cstdint
+-
 iomanip
 -
 limits
@@ -209,6 +217,8 @@ set
 -
 tuple
 -
+type_traits
+-
 utility
 -
 vector
@@ -219,9 +229,13 @@ gtest/internal/gtest-port.h
 googletest-src/googletest/include/gtest/internal/gtest/internal/gtest-port.h
 gtest/gtest-printers.h
 googletest-src/googletest/include/gtest/internal/gtest/gtest-printers.h
+gtest/gtest-test-part.h
+googletest-src/googletest/include/gtest/internal/gtest/gtest-test-part.h
 
 googletest-src/googletest/include/gtest/internal/gtest-port-arch.h
 winapifamily.h
+-
+TargetConditionals.h
 -
 
 googletest-src/googletest/include/gtest/internal/gtest-port.h
@@ -235,7 +249,11 @@ stdlib.h
 -
 string.h
 -
-memory
+cerrno
+-
+cstdint
+-
+limits
 -
 type_traits
 -
@@ -247,27 +265,27 @@ AvailabilityMacros.h
 -
 TargetConditionals.h
 -
-algorithm
--
 iostream
 -
-sstream
+locale
+-
+memory
 -
 string
 -
 tuple
 -
-utility
--
 vector
 -
-gtest/internal/gtest-port-arch.h
-googletest-src/googletest/include/gtest/internal/gtest/internal/gtest-port-arch.h
 gtest/internal/custom/gtest-port.h
 googletest-src/googletest/include/gtest/internal/gtest/internal/custom/gtest-port.h
+gtest/internal/gtest-port-arch.h
+googletest-src/googletest/include/gtest/internal/gtest/internal/gtest-port-arch.h
 direct.h
 -
 io.h
+-
+unistd.h
 -
 unistd.h
 -
@@ -283,11 +301,29 @@ pthread.h
 -
 time.h
 -
+absl/types/any.h
+googletest-src/googletest/include/gtest/internal/absl/types/any.h
+any
+-
+absl/types/optional.h
+googletest-src/googletest/include/gtest/internal/absl/types/optional.h
+optional
+-
+absl/strings/string_view.h
+googletest-src/googletest/include/gtest/internal/absl/strings/string_view.h
+string_view
+-
+absl/types/variant.h
+googletest-src/googletest/include/gtest/internal/absl/types/variant.h
+variant
+-
 
 googletest-src/googletest/include/gtest/internal/gtest-string.h
 mem.h
 -
 string.h
+-
+cstdint
 -
 string
 -
